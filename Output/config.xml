@@ -1,0 +1,27 @@
+<!-- Config file for the game -->
+<config>
+  <app>
+    <title>Game Development Testbed</title>
+    <organization>UPC</organization>
+  </app>
+  <renderer>
+    <vsync value="false"/>
+    <camera x="0" y="-480" />	
+  </renderer>
+  <player>
+    <player_ x="48" y="300" />
+    <max_mom x="30"  y="100" />
+    <player_grav gravity="25"/>
+  </player>
+  <window>
+    <resolution width="320" height="320" scale="3"/>
+    <fullscreen value="false"/>
+    <borderless value="false"/>
+    <resizable value="false"/>
+    <fullscreen_window value="false"/>
+  </window>
+
+  <map>
+    <folder>Assets/maps/</folder>
+  </map>
+</config>
