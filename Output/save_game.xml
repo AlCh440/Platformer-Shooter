@@ -8,11 +8,11 @@
 	<scene />
 	<map />
 	<player>
-		<player x="239" y="377" />
+		<player x="46" y="413" />
 	</player>
 	<Enemy>
-		<enemy name="0" x="170" y="299" />
-		<enemy name="1" x="528" y="241" />
+		<enemy name="0" x="486" y="214" />
+		<enemy name="1" x="486" y="214" />
 	</Enemy>
 	<pathfinding />
 	<renderer>

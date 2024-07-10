@@ -14,9 +14,10 @@ Player::Player() : Module()
 {
 	name.Create("player");
 	
+	state = IDLE;
+
 	playerframescounter = 0;
 
-	is_moving = false;
 
 	right_idle.PushBack({ 113, 0, 22, 23 });
 	right_idle.PushBack({ 90, 0, 22, 23 });
@@ -74,9 +75,7 @@ Player::Player() : Module()
 	can_move_left = true;
 	can_move_right = true;
 	can_move_down = true;
-	can_jump = true;
-	can_double_jump = true;
-	die = false;
+	
 }
 
 Player::~Player()
@@ -122,31 +121,48 @@ bool Player::CleanUp()
 bool Player::PreUpdate()
 {
 
-	if (can_jump) can_double_jump = true;
+	
 
 	if (!(app->scene->stop_game ))
 	{
-		if (!die)
+		if (state != DEAD)
 		{
-			if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) && can_move_right)
+			if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) && can_move_right)
 			{
 				momentum.x += 20;
-				is_moving = true;
+			
+				if (state == IDLE) state = MOVE;
 			}
 
-			if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) && can_move_left)
+			if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) && can_move_left)
 			{
-				momentum.x -= 10;
-				is_moving = true;
-			}
-
-			if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) && (can_jump || can_double_jump))
-			{
-				momentum.y = -200;
+				momentum.x -= 20;
 				
- 				if (can_jump) can_jump = false;
-    			else if (can_double_jump) can_double_jump = false;
+				if (state == IDLE) state = MOVE;
 			}
+
+			if ((state == JUMPING))
+			{
+				if ((app->input->GetKey(SDL_SCANCODE_J) == KEY_UP) || (app->input->GetKey(SDL_SCANCODE_J) == KEY_IDLE))
+				{
+					momentum.y = 0;
+					state = FALLING;
+				}
+				
+				if (momentum.y >= 0)
+				{
+					state = FALLING;
+				}
+			}
+
+			if ((app->input->GetKey(SDL_SCANCODE_J) == (KEY_DOWN)) && ((state == MOVE) || (state == IDLE)))
+			{
+				momentum.y = -180;
+				
+				state = JUMPING;
+    			
+			}
+
 		}
 	}
 
@@ -164,10 +180,11 @@ bool Player::Update(float dt)
 	if (player.x < 0) player.x = 0;
 
 	if (momentum.y > max_momentum.y) momentum.y = max_momentum.y;
+	//if (momentum.y < max_momentum.y) momentum.y = max_momentum.y;
 
 	if (momentum.x > 5 && momentum.x < 5) momentum.x = 0;
 
-	LOG("%f", momentum.x);
+	
 
 	player.x += momentum.x / dt;
 	player.y += momentum.y / dt;
@@ -189,12 +206,12 @@ bool Player::Update(float dt)
 
 	if (direction == 0)
 	{
-		if ((playerframescounter > 180) && !die)
+		if ((playerframescounter > 180) && (state == !DEAD))
 		{
 			if (current_animation == &right_running) current_animation = &right_idle;
 			else if (current_animation == &left_running) current_animation = &left_idle;
 		}
-		else if (die)
+		else if (state == DEAD)
 		{
 			current_animation = &dying;
 		}
@@ -214,7 +231,7 @@ bool Player::Update(float dt)
 
 	current_animation->Update();
 
-	is_moving = false;
+	
 	can_move_right = true;
 	can_move_left = true;
 	can_move_down = true;
@@ -259,6 +276,15 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 				player.y = c2->rect.y - player.h;
 				
 				momentum.y = 0;
+				
+				if (momentum.x == 0)
+				{
+					state = IDLE;
+				}
+				else
+				{
+					state = MOVE;
+				}
 			}
 			else 
 			{
@@ -298,7 +324,8 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 
 	if (c1 == hit_player && c2->type == Collider::Type::ENEMY)
 	{
-		die = true;
+		
+		state = DEAD;
 		current_animation = &dying;
 		dying.Reset();
 	}
@@ -340,6 +367,6 @@ void Player::StartLvl()
 	app->render->camera.x = config.child("renderer").child("camera").attribute("x").as_int();
 	app->render->camera.y = config.child("renderer").child("camera").attribute("y").as_int();
 
-	die = false;
+	state = IDLE;
 	current_animation = &right_idle;
 }

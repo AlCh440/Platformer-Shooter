@@ -10,8 +10,8 @@
   </renderer>
   <player>
     <player_ x="48" y="300" />
-    <max_mom x="30"  y="100" />
-    <player_grav gravity="25"/>
+    <max_mom x="30"  y="70" />
+    <player_grav gravity="15"/>
   </player>
   <window>
     <resolution width="320" height="320" scale="3"/>

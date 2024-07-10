@@ -8,7 +8,13 @@
 #include "Point.h"
 #include "SDL/include/SDL.h"
 
-
+enum PlayerState {
+	IDLE,
+	MOVE,
+	JUMPING,
+	FALLING,
+	DEAD
+};
 
 class Player : public Module
 {
@@ -67,8 +73,10 @@ private:
 	bool can_move_left;
 	bool can_move_down;
 	bool can_jump;
-	bool can_double_jump;
+	
 	int playerframescounter;
+
+	PlayerState state;
 };
 
 #endif
