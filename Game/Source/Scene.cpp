@@ -88,7 +88,8 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	
+	bool ret = true;
+
 	if (stop_game) stop_input = true;
 	else stop_input = false;
 
@@ -146,7 +147,7 @@ bool Scene::Update(float dt)
 
 	if (win_con && stop_game)
 	{
-
+		ret = false;
 		// draw win screen
 		app->render->DrawRectangle({ 0, 0, 300, 300 }, 255, 255, 255, 240);
 
@@ -160,7 +161,7 @@ bool Scene::Update(float dt)
 
 	}
 
-	return true;
+	return ret;
 }
 
 // Called each loop iteration
@@ -189,13 +190,13 @@ void Scene::OnCollision(Collider* c1, Collider* c2)
 	{
 		stop_game = true;
 		win_con = false;
-		app->start_preupdate = false;
+		
 	}
 	else if (c1->type == Collider::Type::WIN)
 	{
 		stop_game = true;
 		win_con = true;
-		app->start_preupdate = false;
+	
 
 	}
 	else if (c1->type == Collider::Type::CAM)

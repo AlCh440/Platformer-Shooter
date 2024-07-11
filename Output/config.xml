@@ -10,12 +10,12 @@
   </renderer>
   <player>
     <player_ x="48" y="300" />
-    <max_mom x="30"  y="70" />
-    <player_grav gravity="15"/>
+    <max_mom x="30"  y="160" />
+    <player_grav gravity="10"/>
   </player>
   <window>
     <resolution width="320" height="320" scale="3"/>
-    <fullscreen value="false"/>
+    <fullscreen value="true"/>
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>

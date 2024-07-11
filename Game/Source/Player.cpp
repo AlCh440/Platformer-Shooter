@@ -179,8 +179,8 @@ bool Player::Update(float dt)
 
 	if (player.x < 0) player.x = 0;
 
-	if (momentum.y > max_momentum.y) momentum.y = max_momentum.y;
-	//if (momentum.y < max_momentum.y) momentum.y = max_momentum.y;
+	if (momentum.y > max_momentum.y + 30) momentum.y = max_momentum.y + 30;
+	if (momentum.y < -max_momentum.y) momentum.y = -max_momentum.y;
 
 	if (momentum.x > 5 && momentum.x < 5) momentum.x = 0;
 
@@ -261,7 +261,15 @@ void Player::gravity(float dt)
 {
 	if (can_move_down)
 	{
-		momentum.y += gravity_;
+		if (momentum.y >= 0)
+		{
+			momentum.y += gravity_ + 20;
+		}
+		else 
+		{
+			momentum.y += gravity_ ;
+		}
+
 	}
 }
 
@@ -317,8 +325,16 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 		{
 			if (player.x + player.h > c2->rect.x) player.y = c2->rect.y - player.h;
 			momentum.y = 0;
+			if (momentum.x == 0)
+			{
+				state = IDLE;
+			}
+			else
+			{
+				state = MOVE;
+			}
 		}
-		can_jump = true;
+		
 		can_move_down = false;
 	}
 
