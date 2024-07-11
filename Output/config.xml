@@ -15,7 +15,7 @@
   </player>
   <window>
     <resolution width="320" height="320" scale="3"/>
-    <fullscreen value="true"/>
+    <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>
