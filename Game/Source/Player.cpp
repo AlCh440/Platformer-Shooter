@@ -102,7 +102,7 @@ bool Player::Start()
 	hit_player = app->coll->AddCollider(player, Collider::Type::PLAYER, 0, app->player);
 	near_right = app->coll->AddCollider({ player.x + player.w, player.y, 1, player.h - 1 }, Collider::Type::NEAR, 0, app->player);
 	near_left = app->coll->AddCollider({ player.x - 1, player.y, 1, player.h - 1 }, Collider::Type::NEAR, 0, app->player);
-	near_down = app->coll->AddCollider({ player.x, player.y + player.w, player.w, 4 }, Collider::Type::NEAR, 0, app->player);
+	near_down = app->coll->AddCollider({ player.x, player.y + player.w + 3, player.w, 4 }, Collider::Type::NEAR, 0, app->player);
 
 	current_animation = &right_running;
 
@@ -179,7 +179,7 @@ bool Player::Update(float dt)
 
 	if (player.x < 0) player.x = 0;
 
-	if (momentum.y > max_momentum.y + 30) momentum.y = max_momentum.y + 30;
+	if (momentum.y > max_momentum.y + 20) momentum.y = max_momentum.y + 20;
 	if (momentum.y < -max_momentum.y) momentum.y = -max_momentum.y;
 
 	if (momentum.x > 5 && momentum.x < 5) momentum.x = 0;
@@ -199,14 +199,19 @@ bool Player::Update(float dt)
 		momentum.x -= 2;
 		direction = 1;
 	}
-	else if (momentum.x == 0 && momentum.y == 0)
+	else
 	{
 		direction = 0;
+		state = IDLE;
 	}
+	
+	
 
-	if (direction == 0)
+	if (state == IDLE)
 	{
-		if ((playerframescounter > 180) && (state == !DEAD))
+		playerframescounter++;
+
+		if ((playerframescounter > 180))
 		{
 			if (current_animation == &right_running) current_animation = &right_idle;
 			else if (current_animation == &left_running) current_animation = &left_idle;
@@ -215,17 +220,20 @@ bool Player::Update(float dt)
 		{
 			current_animation = &dying;
 		}
-		else playerframescounter++;
 	}
-	else if (direction == 1)
+	else
+	{
+		playerframescounter = 0;
+	}
+	
+	if (direction == 1)
 	{
 		current_animation = &right_running;
-		playerframescounter = 0;
 	}
 	else if (direction == 2)
 	{
 		current_animation = &left_running;
-		playerframescounter = 0;
+
 	}
 
 
