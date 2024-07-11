@@ -102,7 +102,7 @@ bool Player::Start()
 	hit_player = app->coll->AddCollider(player, Collider::Type::PLAYER, 0, app->player);
 	near_right = app->coll->AddCollider({ player.x + player.w, player.y, 1, player.h - 1 }, Collider::Type::NEAR, 0, app->player);
 	near_left = app->coll->AddCollider({ player.x - 1, player.y, 1, player.h - 1 }, Collider::Type::NEAR, 0, app->player);
-	near_down = app->coll->AddCollider({ player.x, player.y + player.w + 3, player.w, 4 }, Collider::Type::NEAR, 0, app->player);
+	near_down = app->coll->AddCollider({ player.x, player.y + player.w + 7, player.w, 4 }, Collider::Type::NEAR, 0, app->player);
 
 	current_animation = &right_running;
 
@@ -201,8 +201,11 @@ bool Player::Update(float dt)
 	}
 	else
 	{
-		direction = 0;
-		state = IDLE;
+		if (momentum.y > 0)
+		{
+			direction = 0;
+			state = IDLE;
+		}
 	}
 	
 	

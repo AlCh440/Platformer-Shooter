@@ -14,7 +14,7 @@
     <player_grav gravity="10"/>
   </player>
   <window>
-    <resolution width="320" height="320" scale="3"/>
+    <resolution width="330" height="330" scale="3"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>

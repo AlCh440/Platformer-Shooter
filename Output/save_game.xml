@@ -11,8 +11,8 @@
 		<player x="46" y="413" />
 	</player>
 	<Enemy>
-		<enemy name="0" x="486" y="214" />
-		<enemy name="1" x="486" y="214" />
+		<enemy name="0" x="465" y="193" />
+		<enemy name="1" x="465" y="193" />
 	</Enemy>
 	<pathfinding />
 	<renderer>
